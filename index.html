@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module - Transmission Modes & Media</title>
+    <style>
+        /* ======================================================= */
+        /* CORE STYLES (Foundation Diploma Template Match)          */
+        /* ======================================================= */
+        :root { 
+            --bg-color: #0b0f19; --primary: #3b82f6; --accent: #f43f5e; 
+            --whatsapp: #25D366; --google: #4285F4; --fb-blue: #1877F2; 
+            --zoom-blue: #2D8CFF; --yt-red: #FF0000; --text-main: #f8fafc; 
+            --text-muted: #94a3b8; --panel-bg: rgba(15, 23, 42, 0.7); 
+            --gold: #f59e0b; --green: #10b981; --cyan: #06b6d4; --purple: #8b5cf6;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; user-select: none; }
+        html { font-size: 16px; } 
+        @media (min-width: 1920px) { html { font-size: 20px; } } 
+        @media (min-width: 2560px) { html { font-size: 26px; } } 
+        @media (min-width: 3800px) { html { font-size: 36px; } }
+        
+        body { background-color: var(--bg-color); color: var(--text-main); overflow: hidden; width: 100vw; height: 100vh; background-image: radial-gradient(circle at center, #1e1b4b 0%, #0b0f19 100%); }
+        #presentation { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
+        .slide { position: absolute; width: 92%; max-width: 1600px; height: 86%; opacity: 0; transform: scale(0.95) translateY(20px); transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1); display: flex; flex-direction: column; justify-content: center; pointer-events: none; overflow-y: auto; scrollbar-width: none; }
+        .slide::-webkit-scrollbar { display: none; } 
+        .slide.active { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
+        
+        h1 { font-size: 3.5rem; color: var(--primary); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
+        h2 { font-size: 2rem; margin-bottom: 25px; color: #cbd5e1; } 
+        p, li { font-size: 1.5rem; line-height: 1.8; color: var(--text-muted); margin-bottom: 15px; }
+        .module-tag { display:inline-block; border: 1px solid var(--cyan); padding: 4px 18px; border-radius: 20px; font-weight: bold; letter-spacing: 1px; margin-bottom: 10px; font-size: 0.9rem; align-self: flex-start; }
+
+        .landscape-box { position: relative; width: 100%; height: 48vh; min-height: 380px; max-height: 600px; background: var(--panel-bg); border-radius: 15px; border: 1px solid #334155; margin-top: 15px; box-shadow: inset 0 0 40px rgba(0,0,0,0.7); overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .desc-box { margin-top: 20px; background: rgba(15, 23, 42, 0.8); border-left: 5px solid var(--primary); padding: 15px 25px; border-radius: 8px; height: auto; font-size: 1.3rem; line-height: 1.6; color: #f8fafc; opacity: 0; transition: opacity 0.5s; z-index: 50; position: relative; overflow: visible; display: block; }
+        
+        .comparison-layout { display: flex; gap: 30px; width: 100%; height: 100%; flex-wrap: wrap; justify-content: center; align-items: center;}
+        .info-card { flex: 1; min-width: 250px; background: rgba(15, 23, 42, 0.9); border: 2px solid #334155; padding: 30px; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); transform: translateY(30px); opacity: 0; display: flex; flex-direction: column; position: relative; overflow: hidden; transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
+        .info-card.active-card { opacity: 1; transform: translateY(0); }
+        
+        .card-header { display: flex; align-items: center; gap: 20px; margin-bottom: 15px; border-bottom: 1px solid #334155; padding-bottom: 15px; }
+        .card-icon { width: 70px; height: 70px; background: rgba(255,255,255,0.05); border-radius: 15px; display: flex; justify-content: center; align-items: center; font-size: 3rem;}
+        .card-title-box h3 { font-size: 2rem; color: #f8fafc; margin-bottom: 5px;} .card-title-box span { font-size: 1.1rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
+        
+        /* Grid Layouts */
+        .proto-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; width: 100%; max-width: 1200px; }
+        .proto-card { background: rgba(30, 41, 59, 0.7); border: 2px solid #475569; border-radius: 15px; padding: 25px 20px; display: flex; flex-direction: column; align-items: center; text-align: center; opacity: 0; transform: scale(0.9) translateY(20px); transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 10px 20px rgba(0,0,0,0.3); position: relative; overflow: hidden;}
+        .proto-card.show { opacity: 1; transform: scale(1) translateY(0); }
+        .proto-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: var(--border-color, #475569); }
+        .pc-icon { font-size: 3.5rem; margin-bottom: 15px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5)); }
+        
+        /* SPECIFIC ANIMATION ELEMENTS */
+        .comm-system { display: flex; justify-content: space-between; align-items: center; width: 80%; height: 200px; position: relative; }
+        .device-node { width: 140px; height: 140px; background: #1e293b; border: 3px solid #475569; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.6); position: relative; }
+        .device-node .d-icon { font-size: 3.5rem; margin-bottom: 5px; }
+        .device-node .d-label { font-weight: bold; color: white; font-size: 1.1rem; }
+        
+        .transmission-path { position: absolute; top: 50%; left: 140px; right: 140px; height: 8px; background: rgba(255,255,255,0.1); transform: translateY(-50%); border-radius: 4px; overflow: hidden; display: flex; justify-content: center; align-items: center;}
+        
+        .data-packet { position: absolute; width: 40px; height: 20px; background: var(--primary); border-radius: 10px; opacity: 0; box-shadow: 0 0 20px var(--primary); display: flex; justify-content: center; align-items: center; font-size: 0.8rem; color: white; font-weight: bold;}
+        
+        /* Simplex Animation */
+        .simplex-path { background: rgba(59, 130, 246, 0.2); }
+        .simplex-active .data-packet { animation: simplexMove 2s linear infinite; }
+        @keyframes simplexMove { 0% { left: 0; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { left: 100%; opacity: 0; } }
+
+        /* Half-Duplex Animation */
+        .half-duplex-path { background: rgba(245, 158, 11, 0.2); }
+        .data-packet.hd { background: var(--gold); box-shadow: 0 0 20px var(--gold); }
+        .hd-active .data-packet.hd { animation: halfDuplexMove 6s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+        @keyframes halfDuplexMove { 
+            0%, 5% { left: 0; opacity: 0; transform: scaleX(1); } 
+            10% { opacity: 1; left: 10%; transform: scaleX(1); } 
+            40% { left: 90%; opacity: 1; transform: scaleX(1); } 
+            45%, 50% { left: 100%; opacity: 0; transform: scaleX(1); }
+            55% { left: 100%; opacity: 0; transform: scaleX(-1); background: var(--accent); box-shadow: 0 0 20px var(--accent); }
+            60% { left: 90%; opacity: 1; transform: scaleX(-1); background: var(--accent); box-shadow: 0 0 20px var(--accent); }
+            90% { left: 10%; opacity: 1; transform: scaleX(-1); background: var(--accent); box-shadow: 0 0 20px var(--accent); }
+            95%, 100% { left: 0; opacity: 0; transform: scaleX(-1); background: var(--accent); box-shadow: 0 0 20px var(--accent); }
+        }
+
+        /* Full-Duplex Animation */
+        .full-duplex-path { background: transparent; height: 60px; display: flex; flex-direction: column; justify-content: space-between;}
+        .fd-line { width: 100%; height: 8px; background: rgba(16, 185, 129, 0.2); border-radius: 4px; position: relative; overflow: hidden; }
+        .data-packet.fd1 { background: var(--green); box-shadow: 0 0 20px var(--green); top: -6px;}
+        .data-packet.fd2 { background: var(--cyan); box-shadow: 0 0 20px var(--cyan); bottom: -6px;}
+        .fd-active .data-packet.fd1 { animation: simplexMove 1.5s linear infinite; }
+        .fd-active .data-packet.fd2 { animation: reverseMove 1.5s linear infinite; }
+        @keyframes reverseMove { 0% { left: 100%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { left: 0%; opacity: 0; } }
+
+        /* Media Effects */
+        .fiber-pulse { width: 100%; height: 4px; background: rgba(255,255,255,0.2); position: relative; margin-top: 15px; border-radius: 2px; overflow: hidden; }
+        .fiber-light { position: absolute; left: -50px; width: 50px; height: 100%; background: var(--primary); box-shadow: 0 0 20px var(--primary); animation: fiberGlow 2s infinite; }
+        @keyframes fiberGlow { 100% { left: 100%; } }
+
+        .wifi-waves { display: flex; flex-direction: column; align-items: center; gap: 5px; margin-top: 10px; }
+        .wifi-wave { width: 30px; height: 5px; border-radius: 50% 50% 0 0; border-top: 3px solid var(--accent); opacity: 0; animation: wifiPulse 1.5s infinite; }
+        .wifi-wave:nth-child(2) { width: 50px; height: 10px; animation-delay: 0.2s; }
+        .wifi-wave:nth-child(3) { width: 70px; height: 15px; animation-delay: 0.4s; }
+        @keyframes wifiPulse { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; box-shadow: 0 -5px 10px rgba(244, 63, 94, 0.5); } }
+
+        @media (max-width: 1024px) {
+            .comm-system { width: 100%; flex-direction: column; height: auto; gap: 60px; }
+            .transmission-path { left: 50%; right: auto; top: 140px; bottom: 140px; width: 8px; height: auto; transform: translateX(-50%); }
+            .full-duplex-path { width: 60px; flex-direction: row; height: 100%; }
+            .fd-line { width: 8px; height: 100%; }
+            @keyframes simplexMove { 0% { top: 0; opacity: 0; left: -16px;} 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; left: -16px;} }
+            @keyframes reverseMove { 0% { top: 100%; opacity: 0; left: -16px;} 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 0%; opacity: 0; left: -16px;} }
+            @keyframes halfDuplexMove { 
+                0%, 5% { top: 0; opacity: 0; left: -16px;} 
+                10% { opacity: 1; top: 10%; left: -16px;} 
+                40% { top: 90%; opacity: 1; left: -16px;} 
+                45%, 50% { top: 100%; opacity: 0; left: -16px;}
+                55% { top: 100%; opacity: 0; background: var(--accent); left: -16px;}
+                60% { top: 90%; opacity: 1; background: var(--accent); left: -16px;}
+                90% { top: 10%; opacity: 1; background: var(--accent); left: -16px;}
+                95%, 100% { top: 0; opacity: 0; background: var(--accent); left: -16px;}
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="presentation" onclick="nextSlide()">
+        
+        <!-- SLIDE 0: TITLE SLIDE -->
+        <section class="slide active" id="slide-0" style="align-items: center; text-align: center; justify-content: center;">
+            <div style="max-width: 1000px; width: 100%;">
+                <h2 style="color: var(--accent); font-size: 1.5rem; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 2px;">Foundation Diploma in ICT</h2>
+                <h1 style="font-size: 3.5rem; margin-bottom: 5px; color: var(--primary); text-shadow: 0 0 20px rgba(59, 130, 246, 0.4);">දත්ත සම්ප්‍රේෂණය</h1>
+                <p style="font-size: 2rem; color: var(--text-main); font-weight: bold; margin-bottom: 25px;">Transmission Modes & Media</p>
+
+                <div id="module-list" style="background: rgba(15, 23, 42, 0.8); border: 1px solid #334155; border-radius: 15px; padding: 20px 25px; text-align: left; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+                    <div style="font-size: 1.2rem; color: #e2e8f0; width: 100%; text-align: center; border-bottom: 1px solid #334155; padding-bottom: 10px; margin-bottom: 10px;"><b>1. සම්ප්‍රේෂණ ආකාර (Modes)</b></div>
+                    <div style="font-size: 1.2rem; color: #e2e8f0;"><span style="color:var(--primary);">📺 Simplex</span></div>
+                    <div style="font-size: 1.2rem; color: #e2e8f0;"><span style="color:var(--gold);">📻 Half-Duplex</span></div>
+                    <div style="font-size: 1.2rem; color: #e2e8f0;"><span style="color:var(--green);">📱 Full-Duplex</span></div>
+                    
+                    <div style="font-size: 1.2rem; color: #e2e8f0; width: 100%; text-align: center; border-bottom: 1px solid #334155; padding-bottom: 10px; margin-bottom: 10px; margin-top: 10px;"><b>2. සම්ප්‍රේෂණ මාධ්‍ය (Media)</b></div>
+                    <div style="font-size: 1.2rem; color: #e2e8f0;"><span style="color:var(--cyan);">🔌 Wired (රැහැන් සහිත)</span></div>
+                    <div style="font-size: 1.2rem; color: #e2e8f0;"><span style="color:var(--accent);">📡 Wireless (රැහැන් රහිත)</span></div>
+                </div>
+
+                <div id="profile-box" style="display: inline-flex; align-items: center; justify-content: center; gap: 20px; background: rgba(15, 23, 42, 0.9); padding: 15px 30px; border-radius: 15px; border-left: 5px solid var(--primary); text-align: left; max-width: 900px; box-shadow: 0 5px 25px rgba(0,0,0,0.4); z-index: 10;">
+                    <div style="width: 80px; height: 80px; border-radius: 12px; border: 2px solid var(--primary); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); flex-shrink: 0; background-color: #1e293b; background-image: url('./image_8ca44b.png'); background-size: cover; background-position: center;"></div>
+                    <div>
+                        <p style="font-size: 0.9rem; color: var(--primary); margin-bottom: 3px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">Lecturer</p>
+                        <h3 style="font-size: 1.6rem; color: #f8fafc; margin-bottom: 4px;">Himanka Dodangoda</h3>
+                        <p style="font-size: 1rem; color: #cbd5e1; margin-bottom: 3px;">MSc in AI (Reading) | MBA | BSc (Hons) in Software Eng. (UK)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 1: SIMPLEX MODE -->
+        <section class="slide" id="slide-1">
+            <div class="module-tag" style="background:rgba(59, 130, 246, 0.2); border-color: var(--primary); color: var(--primary);">TRANSMISSION MODES</div>
+            <h1 style="color: var(--primary);">Simplex (ඒකපථ ක්‍රමය)</h1>
+            <h2>දත්ත ගමන් කරන්නේ එක් දිශාවකට පමණි</h2>
+            
+            <div class="landscape-box" style="border-color: var(--primary); box-shadow: inset 0 0 40px rgba(59, 130, 246, 0.15);">
+                <div class="comm-system simplex-active" id="sys-simplex">
+                    
+                    <div class="device-node" style="border-color: var(--primary);">
+                        <div class="d-icon">🗼</div>
+                        <div class="d-label">TV Tower</div>
+                    </div>
+
+                    <div class="transmission-path simplex-path">
+                        <div class="data-packet">Data</div>
+                        <div class="data-packet" style="animation-delay: -1s;">Video</div>
+                    </div>
+
+                    <div class="device-node" style="border-color: #475569;">
+                        <div class="d-icon">📺</div>
+                        <div class="d-label">Television</div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="desc-box" id="desc-1" style="border-left-color: var(--primary);">Click to read about Simplex...</div>
+        </section>
+
+        <!-- SLIDE 2: HALF-DUPLEX MODE -->
+        <section class="slide" id="slide-2">
+            <div class="module-tag" style="background:rgba(245, 158, 11, 0.2); border-color: var(--gold); color: var(--gold);">TRANSMISSION MODES</div>
+            <h1 style="color: var(--gold);">Half-Duplex (අර්ධ-ද්විපථ)</h1>
+            <h2>දිශාවන් දෙකටම දත්ත යැවිය හැක, නමුත් එකවර නොවේ</h2>
+            
+            <div class="landscape-box" style="border-color: var(--gold); box-shadow: inset 0 0 40px rgba(245, 158, 11, 0.15);">
+                <div class="comm-system hd-active" id="sys-hd">
+                    
+                    <div class="device-node" style="border-color: var(--gold);">
+                        <div class="d-icon">📻</div>
+                        <div class="d-label">Walkie A</div>
+                    </div>
+
+                    <div class="transmission-path half-duplex-path">
+                        <div class="data-packet hd">Audio</div>
+                    </div>
+
+                    <div class="device-node" style="border-color: var(--accent);">
+                        <div class="d-icon">📻</div>
+                        <div class="d-label">Walkie B</div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="desc-box" id="desc-2" style="border-left-color: var(--gold);">Click to read about Half-Duplex...</div>
+        </section>
+
+        <!-- SLIDE 3: FULL-DUPLEX MODE -->
+        <section class="slide" id="slide-3">
+            <div class="module-tag" style="background:rgba(16, 185, 129, 0.2); border-color: var(--green); color: var(--green);">TRANSMISSION MODES</div>
+            <h1 style="color: var(--green);">Full-Duplex (පූර්ණ-ද්විපථ)</h1>
+            <h2>එකම වෙලාවේ දිශාවන් දෙකටම දත්ත හුවමාරු කළ හැක</h2>
+            
+            <div class="landscape-box" style="border-color: var(--green); box-shadow: inset 0 0 40px rgba(16, 185, 129, 0.15);">
+                <div class="comm-system fd-active" id="sys-fd">
+                    
+                    <div class="device-node" style="border-color: var(--green);">
+                        <div class="d-icon">📱</div>
+                        <div class="d-label">Phone A</div>
+                    </div>
+
+                    <div class="transmission-path full-duplex-path">
+                        <div class="fd-line"><div class="data-packet fd1">Voice</div></div>
+                        <div class="fd-line"><div class="data-packet fd2">Voice</div></div>
+                    </div>
+
+                    <div class="device-node" style="border-color: var(--cyan);">
+                        <div class="d-icon">📱</div>
+                        <div class="d-label">Phone B</div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="desc-box" id="desc-3" style="border-left-color: var(--green);">Click to read about Full-Duplex...</div>
+        </section>
+
+        <!-- SLIDE 4: WIRED MEDIA -->
+        <section class="slide" id="slide-4">
+            <div class="module-tag" style="background:rgba(6, 182, 212, 0.2); border-color: var(--cyan); color: var(--cyan);">TRANSMISSION MEDIA</div>
+            <h1 style="color: var(--cyan);">රැහැන් සහිත මාධ්‍ය (Wired)</h1>
+            <h2>භෞතික කේබල් හරහා දත්ත ගමන් කිරීම (Guided Media)</h2>
+            
+            <div class="landscape-box" style="border-color: var(--cyan); box-shadow: inset 0 0 40px rgba(6, 182, 212, 0.15);">
+                <div class="proto-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
+                    
+                    <div class="proto-card" id="mc-utp" style="--border-color: #3b82f6;">
+                        <div class="pc-icon">🪢</div>
+                        <div class="pc-title" style="font-size: 1.4rem;">Twisted Pair</div>
+                        <p class="pc-desc" style="font-size: 1rem;">පරිගණක ජාල (LAN) සෑදීමට භාවිතා කරන සාමාන්‍ය ජාල කේබල්. (UTP/STP)</p>
+                    </div>
+                    
+                    <div class="proto-card" id="mc-coax" style="--border-color: #f59e0b;">
+                        <div class="pc-icon">🔌</div>
+                        <div class="pc-title" style="font-size: 1.4rem;">Coaxial Cable</div>
+                        <p class="pc-desc" style="font-size: 1rem;">රූපවාහිනී ඇන්ටෙනා සහ කේබල් TV සඳහා බහුලව යොදාගනී. ඝනකම් ආරක්ෂිත තට්ටුවක් ඇත.</p>
+                    </div>
+
+                    <div class="proto-card" id="mc-fiber" style="--border-color: #10b981;">
+                        <div class="pc-icon">🪄</div>
+                        <div class="pc-title" style="font-size: 1.4rem;">Fiber Optic</div>
+                        <p class="pc-desc" style="font-size: 1rem;">දත්ත ආලෝක ධාරා (Light pulses) ලෙස ඉතා වේගයෙන් ගෙන යයි.</p>
+                        <div class="fiber-pulse"><div class="fiber-light"></div></div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="desc-box" id="desc-4" style="border-left-color: var(--cyan);">Click to reveal Wired Media types...</div>
+        </section>
+
+        <!-- SLIDE 5: WIRELESS MEDIA -->
+        <section class="slide" id="slide-5">
+            <div class="module-tag" style="background:rgba(244, 63, 94, 0.2); border-color: var(--accent); color: var(--accent);">TRANSMISSION MEDIA</div>
+            <h1 style="color: var(--accent);">රැහැන් රහිත මාධ්‍ය (Wireless)</h1>
+            <h2>වාතය සහ රික්තකය හරහා තරංග මගින් දත්ත යැවීම (Unguided)</h2>
+            
+            <div class="landscape-box" style="border-color: var(--accent); box-shadow: inset 0 0 40px rgba(244, 63, 94, 0.15);">
+                <div class="proto-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
+                    
+                    <div class="proto-card" id="mc-radio" style="--border-color: #f43f5e;">
+                        <div class="pc-icon">📻</div>
+                        <div class="pc-title" style="font-size: 1.4rem;">Radio Waves</div>
+                        <p class="pc-desc" style="font-size: 1rem;">බිත්ති පසා කරගෙන යා හැක. Wi-Fi, Bluetooth සහ රේඩියෝ විකාශන සඳහා යොදාගනී.</p>
+                        <div class="wifi-waves">
+                            <div class="wifi-wave"></div><div class="wifi-wave"></div><div class="wifi-wave"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="proto-card" id="mc-micro" style="--border-color: #8b5cf6;">
+                        <div class="pc-icon">📡</div>
+                        <div class="pc-title" style="font-size: 1.4rem;">Microwaves</div>
+                        <p class="pc-desc" style="font-size: 1rem;">සරල රේඛීයව ගමන් කරයි. ජංගම දුරකථන කුළුණු (Cellular) සහ චන්ද්‍රිකා සන්නිවේදනයට (Satellite) යොදාගනී.</p>
+                    </div>
+
+                    <div class="proto-card" id="mc-infra" style="--border-color: #ef4444;">
+                        <div class="pc-icon">🎮</div>
+                        <div class="pc-title" style="font-size: 1.4rem;">Infrared (IR)</div>
+                        <p class="pc-desc" style="font-size: 1rem;">කෙටි දුරක් සඳහා පමණක් ක්‍රියා කරයි. බාධක හරහා යා නොහැක. (උදා: TV Remote Control).</p>
+                    </div>
+
+                </div>
+            </div>
+            <div class="desc-box" id="desc-5" style="border-left-color: var(--accent);">Click to reveal Wireless Media types...</div>
+        </section>
+
+    </div>
+
+    <!-- JAVASCRIPT ANIMATION LOGIC -->
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+        let isAnimating = false;
+
+        // Slide 1 Data
+        let s1Step = -1;
+        const s1Data = [
+            { txt: "<b>Simplex (ඒකපථ):</b> දත්ත නිරන්තරයෙන් එක් දිශාවකට පමණක් ගමන් කරයි. ග්‍රාහකයාට නැවත දත්ත යැවීමට නොහැක." },
+            { txt: "<b>උදාහරණ:</b> රූපවාහිනී සහ රේඩියෝ විකාශනය (TV / Radio Broadcasting), පරිගණක යතුරුපුවරුව (Keyboard)." }
+        ];
+
+        // Slide 2 Data
+        let s2Step = -1;
+        const s2Data = [
+            { txt: "<b>Half-Duplex (අර්ධ-ද්විපථ):</b> උපාංග දෙකටම දත්ත යැවිය හැක. නමුත් එක් අවස්ථාවක දත්ත යැවිය හැක්කේ එක් අයෙකුට පමණි." },
+            { txt: "<b>උදාහරණ:</b> Walkie-Talkie උපාංගය (එක් අයෙක් කතා කරන විට අනෙක් කෙනා අසා සිටිය යුතුය)." }
+        ];
+
+        // Slide 3 Data
+        let s3Step = -1;
+        const s3Data = [
+            { txt: "<b>Full-Duplex (පූර්ණ-ද්විපථ):</b> උපාංග දෙක අතර එකම වෙලාවේ (Simultaneously) දිශාවන් දෙකටම දත්ත හුවමාරු වේ." },
+            { txt: "<b>උදාහරණ:</b> ජංගම දුරකථන ඇමතුම් (Phone calls), අන්තර්ජාලය භාවිත කිරීම (Internet Browsing)." }
+        ];
+
+        // Slide 4 Data
+        let s4Step = -1;
+        const s4Data = [
+            { id: 'mc-utp', txt: "<b>Twisted Pair Cable:</b> වයර් යුගල වශයෙන් අඹරා ඇත. මිලෙන් අඩු අතර සාමාන්‍ය ජාල සෑදීමට භාවිතා කරයි." },
+            { id: 'mc-coax', txt: "<b>Coaxial Cable:</b> මැදින් ඝනකම් තඹ කම්බියක් ඇත. බාහිර බාධා අවම වන සේ නිපදවා ඇත." },
+            { id: 'mc-fiber', txt: "<b>Fiber Optic Cable:</b> වීදුරු හෝ ප්ලාස්ටික් කෙඳි හරහා ආලෝකය මගින් දත්ත යවයි. ඉතා වේගවත්ය, මිලෙන් වැඩිය." }
+        ];
+
+        // Slide 5 Data
+        let s5Step = -1;
+        const s5Data = [
+            { id: 'mc-radio', txt: "<b>Radio Waves:</b> බිත්ති වැනි බාධක හරහා ගමන් කළ හැක. Wi-Fi සහ Bluetooth ක්‍රියා කරන්නේ මේ හරහාය." },
+            { id: 'mc-micro', txt: "<b>Microwaves:</b> ගොඩනැගිලි හරහා යා නොහැක. දුරකථන සංඥා කුළුණු (Towers) සහ චන්ද්‍රිකා (Satellites) සඳහා භාවිත වේ." },
+            { id: 'mc-infra', txt: "<b>Infrared (IR):</b> ඉතා ආසන්නව ඇති උපාංග සඳහා පමණි. TV Remote Control, පැරණි දුරකථන වල භාවිත විය." }
+        ];
+
+        function updateSlides() {
+            slides.forEach((slide, index) => { 
+                if (index === currentSlide) slide.classList.add('active'); 
+                else slide.classList.remove('active'); 
+            });
+
+            // Resets
+            if (currentSlide === 1) {
+                s1Step = -1; isAnimating = false;
+                document.getElementById('desc-1').innerHTML = "Click to read about Simplex...";
+            }
+            if (currentSlide === 2) {
+                s2Step = -1; isAnimating = false;
+                document.getElementById('desc-2').innerHTML = "Click to read about Half-Duplex...";
+            }
+            if (currentSlide === 3) {
+                s3Step = -1; isAnimating = false;
+                document.getElementById('desc-3').innerHTML = "Click to read about Full-Duplex...";
+            }
+            if (currentSlide === 4) {
+                s4Step = -1; isAnimating = false;
+                s4Data.forEach(item => document.getElementById(item.id).classList.remove('show'));
+                document.getElementById('desc-4').innerHTML = "Click to reveal Wired Media types...";
+            }
+            if (currentSlide === 5) {
+                s5Step = -1; isAnimating = false;
+                s5Data.forEach(item => document.getElementById(item.id).classList.remove('show'));
+                document.getElementById('desc-5').innerHTML = "Click to reveal Wireless Media types...";
+            }
+        }
+
+        async function runTextStep(stepVar, dataArray, descId) {
+            if (isAnimating) return stepVar; 
+            isAnimating = true; 
+            stepVar++;
+            
+            const desc = document.getElementById(descId);
+            
+            desc.style.opacity = 0;
+            setTimeout(() => { 
+                desc.innerHTML = dataArray[stepVar].txt; 
+                desc.style.opacity = 1; 
+                isAnimating = false; 
+            }, 300);
+            
+            return stepVar;
+        }
+
+        async function runGridStep(stepVar, dataArray, descId, cssClass) {
+            if (isAnimating) return stepVar; 
+            isAnimating = true; 
+            stepVar++;
+            
+            const desc = document.getElementById(descId);
+            const targetId = dataArray[stepVar].id;
+            
+            document.getElementById(targetId).classList.add(cssClass);
+            
+            desc.style.opacity = 0;
+            setTimeout(() => { 
+                desc.innerHTML = dataArray[stepVar].txt; 
+                desc.style.opacity = 1; 
+                isAnimating = false; 
+            }, 300);
+            
+            return stepVar;
+        }
+
+        async function nextSlide() {
+            if (isAnimating) return;
+
+            if (currentSlide === 1 && s1Step < s1Data.length - 1) { s1Step = await runTextStep(s1Step, s1Data, 'desc-1'); return; }
+            if (currentSlide === 2 && s2Step < s2Data.length - 1) { s2Step = await runTextStep(s2Step, s2Data, 'desc-2'); return; }
+            if (currentSlide === 3 && s3Step < s3Data.length - 1) { s3Step = await runTextStep(s3Step, s3Data, 'desc-3'); return; }
+            if (currentSlide === 4 && s4Step < s4Data.length - 1) { s4Step = await runGridStep(s4Step, s4Data, 'desc-4', 'show'); return; }
+            if (currentSlide === 5 && s5Step < s5Data.length - 1) { s5Step = await runGridStep(s5Step, s5Data, 'desc-5', 'show'); return; }
+
+            if (currentSlide < slides.length - 1) { 
+                currentSlide++; 
+                updateSlides(); 
+            }
+        }
+
+        function prevSlide() { 
+            if (isAnimating) return;
+            if (currentSlide > 0) { currentSlide--; updateSlides(); } 
+        }
+
+        document.addEventListener('keydown', (e) => { 
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide(); 
+            else if (e.key === 'ArrowLeft') prevSlide(); 
+        });
+
+        updateSlides();
+    </script>
+</body>
+</html>
